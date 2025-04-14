@@ -1,8 +1,8 @@
 # Migrator
-This is a RDB migrator made in Golang. It is used as a package and reads the migration files from a default path (`/internal/config/migrations`). The path can be changed by including `MIGRATOR_FOLDER_PATH` variable inside the .env file.
+This is a RDB migrator made in Golang. It is used as a package and reads the migration files from a path passed in parameter to the Exec function.
 
 #### How to use
-If you don't have a path to use in `MIGRATOR_FOLDER_PATH`, you can run `make migration init` to create the default path. 
+If you don't have a path to use in `path` parameter inside `Exec` function, you can run `make migration-init` to create the default path and then referrence it. 
 
 You have three main options to use the migrator:
 ```Makefile
@@ -15,19 +15,6 @@ make migration-down # use the parameter 'timesToDownMigration=x'
 make migration-status # check how many migrations have been executed
                       # and the last executed migration aswell.
 ```
-
-Needed `.env` variables are:
-```Makefile
-ENV=local  # ex: "local", "prod", "dev".
-
-DB_NAME # ex: "customers-service"
-DB_USERNAME # ex: "admin"
-DB_PASSWORD # ex: "admin"
-DB_HOST # ex: "localhost"
-DB_PORT # ex: "3306"
-DB_TYPE # ex: "mysql", "postgres". The driver used in the connection.
-```
-
 > [!WARNING]
 > Please change the values in the examples.
 
@@ -47,3 +34,4 @@ make migration-gen # use the parameter 'name=y'
                    # the migration_<up|down> files for you
                    # with the name passed as input.
 ```
+The default output for the files is `internal/config/migrations` but you can change it by adding a .env variable called `MIGRATOR_FOLDER_PATH`.
