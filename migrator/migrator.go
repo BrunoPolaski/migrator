@@ -180,7 +180,6 @@ func migrationUp(conn *sql.DB) {
 }
 
 func migrationDown(conn *sql.DB) {
-	path := os.Getenv("MIGRATOR_FOLDER_PATH")
 	if path == "" {
 		path = "internal/config/migrations"
 	}
@@ -247,7 +246,6 @@ func migrationDown(conn *sql.DB) {
 }
 
 func migrationStatus(conn *sql.DB) {
-	path := os.Getenv("MIGRATOR_FOLDER_PATH")
 	files, err := filepath.Glob(path + "/*_up.sql")
 	if err != nil {
 		fmt.Printf("Error reading migration files \n\n%v\n", err)
@@ -288,20 +286,19 @@ func redBackground(slice ...string) {
 }
 
 func createFolderPath() {
-	folderPath := os.Getenv("MIGRATOR_FOLDER_PATH")
-	if folderPath == "" {
-		folderPath = "internal/config/migrations"
+	if path == "" {
+		path = "internal/config/migrations"
 	}
 
-	if _, err := os.Stat(folderPath); os.IsNotExist(err) {
-		err := os.MkdirAll(folderPath, 0755)
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		err := os.MkdirAll(path, 0755)
 		if err != nil {
 			fmt.Printf("Error creating folder path: %v\n", err)
 			return
 		}
-		fmt.Printf("Folder path %s created successfully\n", folderPath)
+		fmt.Printf("Folder path %s created successfully\n", path)
 		return
 	}
 
-	fmt.Printf("Folder path %s already exists\n", folderPath)
+	fmt.Printf("Folder path %s already exists\n", path)
 }
