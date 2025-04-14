@@ -39,10 +39,10 @@ func Exec(conn *sql.DB, migrationsPath string) {
 
 		defer conn.Close()
 		migrationFunc(conn)
-	} else if os.Args[1] == "init" {
+	} else if os.Args[1] == "migration-init" {
 		createFolderPath()
 	} else {
-		fmt.Println("Invalid argument. Use <up|down|status|init>.")
+		fmt.Println("Invalid argument. Use migration-<up|down|status|init>.")
 	}
 }
 
@@ -98,14 +98,14 @@ func runMigration(tx *sql.Tx, file string) error {
 
 	_, err = tx.Exec(string(content))
 	if err != nil {
-		if os.Args[1] == "up" {
+		if os.Args[1] == "migration-up" {
 			return fmt.Errorf("error running migration %s: \n\n%v", file, err)
 		} else {
 			return fmt.Errorf("error rolling back migration %s: \n\n%v", file, err)
 		}
 	}
 
-	if os.Args[1] == "up" {
+	if os.Args[1] == "migration-up" {
 		fmt.Printf("Migration %s ran successfully\n", filepath.Base(file))
 
 		_, err = tx.Exec("INSERT INTO migrations (name) VALUES (?)", filepath.Base(file))
